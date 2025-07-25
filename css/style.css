@@ -54,13 +54,20 @@ h3 {
     }
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
 .label {
     font-size: 0.675rem;
     font-weight: 600;
-    text-transform: uppercase;
     letter-spacing: 1px;
+    padding: 0.2rem 0;
 }
 
+input[type=checkbox],
 .input {
     border: 1px solid var(--lightgrey);
     padding: 0.5rem;
@@ -83,9 +90,10 @@ h3 {
     }
 
     .header-text {
-        font-weight: 500;
-        font-size: 2rem;
-        letter-spacing: 0.9;
+        font-weight: 700;
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+        text-transform: uppercase;
     }
 
     button.add-book {
@@ -186,16 +194,24 @@ h3 {
 
 .modal {
     background-color: var(--white);
-    padding: 1rem;
+    padding: 2rem;
     position: absolute;
     top: 0;
     right: 0;
     min-height: 100vh;
     min-width: 500px;
 
+    h3 {
+        font-weight: 700;
+        padding-bottom: 2rem;
+    }
+
     .field {
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+
+        &.checkbox-field {
+            flex-direction: row;
+        }
     }
 }
