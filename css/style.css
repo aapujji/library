@@ -1,0 +1,62 @@
+:root {
+    --lightgrey: #f5f5f5;
+    --white: #ffffff;
+    --black: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--black);
+    font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+h2, h4 {
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
+h4 {
+    font-size: 0.875rem;
+}
+
+.icon {
+    width: 1em;
+}
+
+.button {
+    border: 0;
+    cursor: pointer;
+    img {
+        width: 1em;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.main {
+    height: 100vh;
+}
+
+.books {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+    background-color: var(--lightgrey);
+    gap: 1rem;
+
+    .book {
+        background-color: var(--white);
+        padding: 1rem;
+        border-radius: 6px;
+
+        .pages {
+            font-size: 0.8rem;
+        }
+    }
+}
