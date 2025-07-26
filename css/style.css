@@ -24,6 +24,7 @@ body {
 h2 {
     font-weight: 600;
     font-size: 1.2rem;
+    margin-bottom: 1.2rem;
 }
 
 h3 {
@@ -62,6 +63,7 @@ button {
 }
 
 .icon-button {
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,6 +78,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    padding: 2rem;
 }
 
 .label {
@@ -123,8 +126,8 @@ button {
     height: 100vh;
     max-width: 1440px;
     margin: auto;
-    margin: 2rem 0 0;
-    padding: 2rem;
+    margin: 3rem 0 0;
+    padding: 0 2rem;
 }
 
 .books {
@@ -167,7 +170,6 @@ button {
         }
 
         .icon-button.delete {
-            background-color: transparent;
             margin: 0.5rem;
             align-self: flex-end;
         }
@@ -220,14 +222,24 @@ button {
 
     .modal {
         background-color: var(--white);
-        padding: 2rem;
         position: absolute;
-        min-width: 500px;
+        width: 30%;
         border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+
+        .icon-button.close {
+            align-self: flex-end;
+            margin: 1rem;
+
+            img {
+                width: 1.2rem;
+            }
+        }
 
         h3 {
             font-weight: 700;
-            padding-bottom: 2rem;
+            padding: 2rem 2rem 0;
         }
 
         .field {

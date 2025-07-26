@@ -1,7 +1,7 @@
 const myLibrary = [];
 
-function Book(title, author, status, coverImage) {
-    this.id = crypto.randomUUID();
+function Book(uuid, title, author, status, coverImage) {
+    this.uuid = uuid;
     this.title = title;
     this.author = author;
     this.image = coverImage;
@@ -10,7 +10,7 @@ function Book(title, author, status, coverImage) {
 
 const addBookToLibrary = (book) => {
     const newBook = new Book;
-    console.log(newBook);
+    newBook.uuid = crypto.randomUUID();
     newBook.title = book.title;
     newBook.author = book.author;
     newBook.status = book.status;
@@ -22,7 +22,7 @@ const addBookToLibrary = (book) => {
 
 const removeBookFromLibrary = (targetBook) => {
     myLibrary.map((book,index) => {
-        if (targetBook.id === book.id) {
+        if (targetBook.id === book.uuid) {
             myLibrary.splice(index,1);
             targetBook.remove();
         }
@@ -33,7 +33,7 @@ const addBookToUI = (book) => {
     const bookList = document.querySelector(".books");
     const bookDiv = document.createElement("div");
     bookDiv.classList.add("book");
-    bookDiv.id = book.id;
+    bookDiv.id = book.uuid;
     const detailsDiv = document.createElement("div");
     detailsDiv.classList.add("book-details");
 
@@ -119,8 +119,10 @@ const init = () => {
     const modal = document.querySelector(".modal");
     container.addEventListener("click", (e) => {
         e.preventDefault();
-        if (e.target.classList.contains("add-book")) {
-            toggleModal();
+        if (e.target.classList.contains("add-book") || 
+            e.target.classList.contains("close") || 
+            e.target.parentElement.classList.contains("close")) {
+                toggleModal();
         } else if (e.target.classList.contains("save")) {
             const userBook = {};
             userBook.title = document.querySelector("input[name=title]").value;
