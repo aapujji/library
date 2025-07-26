@@ -22,7 +22,7 @@ const addBookToLibrary = (book) => {
 
 const removeBookFromLibrary = (targetBook) => {
     myLibrary.map((book,index) => {
-        if (targetBook.id === book.uuid) {
+        if (targetBook.dataset.uuid === book.uuid) {
             myLibrary.splice(index,1);
             targetBook.remove();
         }
@@ -33,7 +33,7 @@ const addBookToUI = (book) => {
     const bookList = document.querySelector(".books");
     const bookDiv = document.createElement("div");
     bookDiv.classList.add("book");
-    bookDiv.id = book.uuid;
+    bookDiv.dataset.uuid = book.uuid;
     const detailsDiv = document.createElement("div");
     detailsDiv.classList.add("book-details");
 
@@ -92,6 +92,20 @@ const toggleModal = () => {
     backdrop.classList.toggle("hidden");
 }
 
+const validateForm = () => {
+    const inputs = document.querySelectorAll("[required]");
+    let isValid = true;
+    inputs.forEach((input) => {
+        const parent = input.parentElement;
+        if (input.value === "") {
+            const message = parent.querySelector(".message");
+            message.classList.remove("hidden");
+            isValid = false;
+        }
+    });
+    return isValid;
+}
+
 const init = () => {
     const testBooks = [
         {
@@ -116,7 +130,6 @@ const init = () => {
     testBooks.forEach(book => addBookToLibrary(book));
 
     const container = document.querySelector(".container");
-    const modal = document.querySelector(".modal");
     container.addEventListener("click", (e) => {
         e.preventDefault();
         if (e.target.classList.contains("add-book") || 
@@ -124,22 +137,30 @@ const init = () => {
             e.target.parentElement.classList.contains("close")) {
                 toggleModal();
         } else if (e.target.classList.contains("save")) {
-            const userBook = {};
-            userBook.title = document.querySelector("input[name=title]").value;
-            userBook.author = document.querySelector("input[name=author]").value;
-            userBook.coverImage = document.querySelector("input[name=coverImage]").value;
-            userBook.status = document.querySelector("select[name=status]").value || "to-read";
-            console.info(userBook);
-            addBookToLibrary(userBook);
-            toggleModal();
+            if (validateForm()) {
+                const userBook = {};
+                userBook.title = document.querySelector("input[name=title]").value;
+                userBook.author = document.querySelector("input[name=author]").value;
+                userBook.coverImage = document.querySelector("input[name=coverImage]").value;
+                userBook.status = document.querySelector("select[name=status]").value || "to-read";
+                addBookToLibrary(userBook);
+                toggleModal();
+            }
         } else if (e.target.classList.contains("delete") || e.target.parentElement.classList.contains("delete")) {
             const targetBook = e.target.closest(".book");
-            if (targetBook && targetBook.id) {
+            if (targetBook && targetBook.dataset.uuid) {
                 removeBookFromLibrary(targetBook);
-            } else {
-                console.log("ERROR - not a valid book");
             }
         }
+    });
+
+    const inputs = document.querySelectorAll(".input, .select");
+    inputs.forEach((input) => {
+        input.addEventListener("input", (e) => {
+            const parent = e.target.parentElement;
+            const message = parent.querySelector(".message");
+            message.classList.add("hidden");
+        });
     });
 };
 
