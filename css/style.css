@@ -175,6 +175,11 @@ button {
             .pages {
                 font-size: 0.8rem;
             }
+
+            .text-button {
+                padding: 0.2rem 0.5rem;
+                min-width: auto;
+            }
         }
 
         .icon-button.delete {
@@ -183,6 +188,7 @@ button {
         }
 
         .card-banner {
+            background-color: var(--lightgrey);
             display: flex;
             justify-content: center;
             gap: 0.1rem;
@@ -191,9 +197,14 @@ button {
             padding: 0.2rem;
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;
+            cursor: pointer;
 
             &.read {
                 background-color: var(--medgreen);
+                
+                .banner-text {
+                    color: var(--white);
+                }
             }
 
             &.reading {
@@ -207,7 +218,7 @@ button {
 
             .banner-text {
                 font-size: 0.8rem;
-                color: var(--white);
+                color: var(--black);
             }
         }
     }
@@ -253,6 +264,11 @@ button {
         .field {
             display: flex;
             flex-direction: column;
+
+            &.checkbox {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
         }
 
         .save {

@@ -29,25 +29,21 @@
                 <form class="form">
                     <div class="field">
                         <label class="label" for="title">Title</label>
-                        <input class="input" type="text" id="title" name="title" required>
+                        <input class="input" type="text" id="title" name="title" required/>
                         <span class="message error hidden">This field is required.</span>
                     </div>
                     <div class="field">
                         <label class="label" for="author">Author</label>
-                        <input class="input" type="text" id="author" name="author" required>
+                        <input class="input" type="text" id="author" name="author" required/>
                         <span class="message error hidden">This field is required.</span>
                     </div>
                     <div class="field">
                         <label class="label" for="coverImage">Cover Image</label>
-                        <input class="input" type="text" id="coverImage" name="coverImage">
+                        <input class="input" type="text" id="coverImage" name="coverImage"/>
                     </div>
-                    <div class="field">
-                        <label class="label" for="read">Status</label>
-                        <select class="select" id="status" name="status">
-                            <option value="to-read">To Read</option>
-                            <option vlaue="reading">Currently Reading</option>
-                            <option value="read">Read</option>
-                        </select>
+                    <div class="field checkbox">
+                        <input class="input" type="checkbox" id="status" name="status"/>
+                        <label class="label" for="status">Read</label>
                     </div>
                     <button type="button" class="text-button save">Save</button>
                 </form>
