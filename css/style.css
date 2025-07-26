@@ -31,6 +31,10 @@ h3 {
     font-size: 1rem;
 }
 
+button {
+    cursor: pointer;
+}
+
 .bg-green {
     background-color: var(--green);
 }
@@ -39,11 +43,25 @@ h3 {
     background-color: var(--blue);
 }
 
+.container {
+    position: relative;
+}
+
 .icon {
     width: 1em;
 }
 
-.button {
+.text-button {
+    background-color: var(--medgreen);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid var(--medgreen);
+    min-width: 100px;
+}
+
+.icon-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,7 +75,7 @@ h3 {
 .form {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 1.5rem;
 }
 
 .label {
@@ -67,7 +85,7 @@ h3 {
     padding: 0.2rem 0;
 }
 
-input[type=checkbox],
+.select,
 .input {
     border: 1px solid var(--lightgrey);
     padding: 0.5rem;
@@ -96,13 +114,7 @@ input[type=checkbox],
         text-transform: uppercase;
     }
 
-    button.add-book {
-        background-color: var(--medgreen);
-        color: var(--white);
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        font-weight: 500;
-        border: 1px solid var(--medgreen);
+    .add-book {
         margin-left: auto;
     }
 }
@@ -113,7 +125,6 @@ input[type=checkbox],
     margin: auto;
     margin: 2rem 0 0;
     padding: 2rem;
-    position: relative;
 }
 
 .books {
@@ -155,7 +166,7 @@ input[type=checkbox],
             }
         }
 
-        .button.delete {
+        .icon-button.delete {
             background-color: transparent;
             margin: 0.5rem;
             align-self: flex-end;
@@ -192,26 +203,40 @@ input[type=checkbox],
     }
 }
 
-.modal {
-    background-color: var(--white);
-    padding: 2rem;
-    position: absolute;
+.modal-backdrop {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
     top: 0;
-    right: 0;
-    min-height: 100vh;
-    min-width: 500px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
 
-    h3 {
-        font-weight: 700;
-        padding-bottom: 2rem;
+    &.hidden {
+        display: none;
     }
 
-    .field {
-        display: flex;
-        flex-direction: column;
+    .modal {
+        background-color: var(--white);
+        padding: 2rem;
+        position: absolute;
+        min-width: 500px;
+        border-radius: 4px;
 
-        &.checkbox-field {
-            flex-direction: row;
+        h3 {
+            font-weight: 700;
+            padding-bottom: 2rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .save {
+            align-self: flex-start;
         }
     }
 }

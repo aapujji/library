@@ -10,12 +10,26 @@ function Book(title, author, status, coverImage) {
 
 const addBookToLibrary = (book) => {
     const newBook = new Book;
+    console.log(newBook);
     newBook.title = book.title;
     newBook.author = book.author;
     newBook.status = book.status;
     newBook.coverImage = book.coverImage;
     myLibrary.push(newBook);
 
+    addBookToUI(newBook);
+};
+
+const removeBookFromLibrary = (targetBook) => {
+    myLibrary.map((book,index) => {
+        if (targetBook.id === book.id) {
+            myLibrary.splice(index,1);
+            targetBook.remove();
+        }
+    });
+};
+
+const addBookToUI = (book) => {
     const bookList = document.querySelector(".books");
     const bookDiv = document.createElement("div");
     bookDiv.classList.add("book");
@@ -38,7 +52,7 @@ const addBookToLibrary = (book) => {
 
     const deleteBtn = document.createElement("button");
     const deleteBtnImg = document.createElement("img");
-    deleteBtn.classList.add("button", "delete");
+    deleteBtn.classList.add("icon-button", "delete");
     deleteBtnImg.src = "./assets/xmark.svg";
     deleteBtnImg.classList.add("icon");
     deleteBtn.appendChild(deleteBtnImg);
@@ -71,16 +85,12 @@ const addBookToLibrary = (book) => {
         bookDiv.appendChild(readBanner);
     }
     bookList.appendChild(bookDiv);
-};
+}
 
-const removeBookFromLibrary = (targetBook) => {
-    myLibrary.map((book,index) => {
-        if (targetBook.id === book.id) {
-            myLibrary.splice(index,1);
-            targetBook.remove();
-        }
-    });
-};
+const toggleModal = () => {
+    const backdrop = document.querySelector(".modal-backdrop");
+    backdrop.classList.toggle("hidden");
+}
 
 const init = () => {
     const testBooks = [
@@ -110,11 +120,17 @@ const init = () => {
     container.addEventListener("click", (e) => {
         e.preventDefault();
         if (e.target.classList.contains("add-book")) {
-            console.log(e);
-            modal.classList.remove("hidden");
-        } else if (e.target.classList.contains("save"))
-            console.log(e.target);
-        else if (e.target.classList.contains("delete") || e.target.parentElement.classList.contains("delete")) {
+            toggleModal();
+        } else if (e.target.classList.contains("save")) {
+            const userBook = {};
+            userBook.title = document.querySelector("input[name=title]").value;
+            userBook.author = document.querySelector("input[name=author]").value;
+            userBook.coverImage = document.querySelector("input[name=coverImage]").value;
+            userBook.status = document.querySelector("select[name=status]").value || "to-read";
+            console.info(userBook);
+            addBookToLibrary(userBook);
+            toggleModal();
+        } else if (e.target.classList.contains("delete") || e.target.parentElement.classList.contains("delete")) {
             const targetBook = e.target.closest(".book");
             if (targetBook && targetBook.id) {
                 removeBookFromLibrary(targetBook);

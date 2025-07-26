@@ -14,30 +14,40 @@
         <header class="header">
             <img class="icon" src="./assets/books-stack.png" alt="Library">
             <span class="header-text">Books</span>
-            <button type="button" class="button add-book">Add Book</button>
+            <button type="button" class="text-button add-book">Add Book</button>
         </header>
         <main class="main">
             <h2>Library</h2>
             <div class="books"></div>
-            <div class="modal hidden">
+        </main>
+        <div class="modal-backdrop hidden">
+            <div class="modal">
                 <h3>Add Book</h3>
                 <form class="form">
                     <div class="field">
                         <label class="label" for="title">Title</label>
-                        <input class="input" type="text" id="title" name="title">
+                        <input class="input" type="text" id="title" name="title" requierd>
                     </div>
                     <div class="field">
                         <label class="label" for="author">Author</label>
-                        <input class="input" type="text" id="author" name="author">
+                        <input class="input" type="text" id="author" name="author" required>
                     </div>
-                    <div class="field checkbox-field">
-                        <label class="label" for="read">Read</label>
-                        <input class="input" type="checkbox" id="read" name="read">
+                    <div class="field">
+                        <label class="label" for="coverImage">Cover Image</label>
+                        <input class="input" type="text" id="coverImage" name="coverImage">
                     </div>
-                    <button type="button" class="save">Save</button>
+                    <div class="field">
+                        <label class="label" for="read">Status</label>
+                        <select class="select" id="status" name="status">
+                            <option value="to-read">To Read</option>
+                            <option vlaue="reading">Currently Reading</option>
+                            <option value="read">Read</option>
+                        </select>
+                    </div>
+                    <button type="button" class="text-button save">Save</button>
                 </form>
             </div>
-        <main>
+        </div>
     </div>
     <script type="text/javascript" src="./js/script.js"></script>
 </body>
