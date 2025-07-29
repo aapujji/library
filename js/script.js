@@ -1,176 +1,171 @@
-const myLibrary = [];
-
-function Book(title, author, read, coverImage) {
-    this.uuid = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.coverImage = coverImage;
-    this.read = read;
-    this.setReadStatus = () => {
-        this.read = !this.read;
+class Library {
+    constructor(name = "myLibrary", books = []){
+        this.name = name;
+        this.books = books;
     }
-};
 
-const addBookToLibrary = (book) => {
-    const newBook = new Book(book.title, book.author, book.read, book.coverImage);
-    myLibrary.push(newBook);
-};
+    addBook(book) {
+        this.books.push(book);
+    }
 
-const removeBookFromLibrary = (targetBook) => {
-    myLibrary.map((book,index) => {
-        if (targetBook.dataset.uuid === book.uuid) {
-            myLibrary.splice(index,1);
-        }
-    });
-};
-
-const updateBookListUI = () => {
-    const bookList = document.querySelector(".books");
-    bookList.innerHTML = "";
-
-    myLibrary.map((book) => {
-        const bookDiv = document.createElement("div");
-        bookDiv.classList.add("book");
-        bookDiv.dataset.uuid = book.uuid;
-        const detailsDiv = document.createElement("div");
-        detailsDiv.classList.add("book-details");
-
-        const coverImage = document.createElement("img");
-        coverImage.src = book.coverImage ? book.coverImage : "./assets/placeholder-book.svg";
-        coverImage.alt = book.title;
-        coverImage.classList.add("cover-image")
-        
-        const titleElem = document.createElement("h3");
-        titleElem.classList.add("title");
-        titleElem.textContent = book.title;
-
-        const authorElem = document.createElement("p");
-        authorElem.classList.add("author");
-        authorElem.textContent = `by ${book.author}`;
-
-        const deleteBtn = document.createElement("button");
-        const deleteBtnImg = document.createElement("img");
-        deleteBtn.classList.add("icon-button", "delete");
-        deleteBtnImg.src = "./assets/xmark.svg";
-        deleteBtnImg.classList.add("icon");
-        deleteBtn.appendChild(deleteBtnImg);
-        bookDiv.appendChild(deleteBtn);
-
-        detailsDiv.appendChild(coverImage);
-        detailsDiv.appendChild(titleElem);
-        detailsDiv.appendChild(authorElem);
-
-        bookDiv.appendChild(detailsDiv);
-
-        const readBanner = document.createElement("div"); 
-        readBanner.classList.add("card-banner");
-        const bannerText = document.createElement("span");
-        bannerText.classList.add("banner-text");
-        const bannerImage = document.createElement("img");
-        bannerImage.classList.add("icon");
-
-        if (book.read) {
-            readBanner.classList.add("read");
-            bannerText.textContent = "read";
-            bannerImage.src = "./assets/check.svg";
-        } else {
-            bannerText.textContent = "mark as read";
-            bannerImage.src = "./assets/check-black.svg";
-        }
-        readBanner.appendChild(bannerImage);
-        readBanner.appendChild(bannerText);
-        bookDiv.appendChild(readBanner);
-        bookList.appendChild(bookDiv);
-    });
+    removeBook(uuid) {
+        this.books.map((book,index) => {
+            if (book.uuid === uuid) {
+                this.books.splice(index,1);
+            }
+        })
+    }
 }
 
-const toggleModal = () => {
-    const backdrop = document.querySelector(".modal-backdrop");
-    backdrop.classList.toggle("hidden");
+class Book {
+    constructor(title, author, coverImage, readStatus = false) {
+        this.uuid = crypto.randomUUID();
+        this.title = title;
+        this.author = author;
+        this.coverImage = coverImage;
+        this.readStatus = readStatus;
+    }
+
+    updateReadStatus() {
+        this.readStatus = !this.readStatus;
+    }
 }
 
-const validateForm = () => {
-    const inputs = document.querySelectorAll("[required]");
-    let isValid = true;
-    inputs.forEach((input) => {
-        const parent = input.parentElement;
-        if (input.value === "") {
-            const message = parent.querySelector(".message");
-            message.classList.remove("hidden");
-            isValid = false;
-        }
-    });
-    return isValid;
-}
-
-const init = () => {
+(() => {
+    // statuc variables
     const testBooks = [
         {
             title: "The Hound of the Baskervilles",
             author: "Arthur Conan Doyle",
             coverImage: "./assets/hound_of_baskervilles.jpg",
-            read: false,
+            readStatus: false,
         },
         {
             title: "Better Than The Movies",
             author: "Lynn Painter",
             coverImage: "./assets/better_than_the_movies.jpg",
-            read: true,
+            readStatus: true,
         },
         {
             title: "Emily Wilde's Map of the Otherlands",
             author: "Heather Fawcett",
             coverImage: "./assets/emily-wildes-map-of-the-otherlands.jpg",
-            read: false,
+            readStatus: false,
         }
     ];
-    testBooks.forEach(book => addBookToLibrary(book));
+
+    const bookList = testBooks.map((book) => {
+        return new Book(book.title, book.author, book.coverImage, book.readStatus);
+    });
+
+    const myLibrary = new Library("My Library", bookList);
+    const books = myLibrary.books;
+
+    // dom cache
+    const bookListDiv = document.querySelector(".books");
+    const modalBackdropDiv = document.querySelector(".modal-backdrop");
+    const form = document.querySelector(".form");
+    const formInputs = document.querySelectorAll(".input, .select");
+    const requiredFormInputs = document.querySelectorAll("[required]");
+    
+    const updateBookListUI = () => {
+        bookListDiv.textContent = "";
+
+        const createUIElement = (type, attributes = {}, children = []) => {
+            const elem = document.createElement(type);
+            Object.entries(attributes).forEach(([key, value]) => {
+                if (key in elem) elem[key] = value;
+                else elem.setAttribute(key,value);
+            });
+            if (children) children.map((childElem) => elem.appendChild(childElem))
+            return elem;
+        }
+
+        books.map((book) => {
+            const bookCoverImageSrc = book.coverImage || "./assets/placeholder-book.svg";
+            const bookCoverImage = createUIElement("img", {class: "cover-image", src: bookCoverImageSrc, alt: book.title})
+
+            const titleH3 = createUIElement("h3", {class: "title", textContent: book.title});
+
+            const authorText = `by ${book.author}`;
+            const authorPara = createUIElement("p", {class: "author", textContent: authorText});
+
+            const readStatusPara = createUIElement("p", {class: "status-text"});
+            const readStatusImg = createUIElement("img", {class: "icon"});
+
+            readStatusPara.textContent = book.readStatus ? "read" : "mark as read";
+            readStatusImg.src = book.readStatus ? "./assets/check.svg" : "./assets/check-black.svg";
+            
+            const readStatusBtn = createUIElement("button", {class: "button icon-button read-status"}, [readStatusImg, readStatusPara]);
+            if (book.readStatus) readStatusBtn.classList.add("read");
+
+            const bookDetailsDiv = createUIElement("div", {class: "book-details"}, [titleH3, authorPara, readStatusBtn]);
+
+            const deleteBtnImg = createUIElement("img", {class: "icon", src: "./assets/xmark.svg"});
+            const deleteBtn = createUIElement("button", {class: "icon-button delete"}, [deleteBtnImg]);
+
+            const bookDiv = createUIElement("div", {class: "book", "data-uuid": book.uuid}, [bookCoverImage, bookDetailsDiv, deleteBtn]);
+
+            bookListDiv.appendChild(bookDiv);
+        })
+    }
+
     updateBookListUI();
 
-    const container = document.querySelector(".container");
-    container.addEventListener("click", (e) => {
+    const toggleModal = () => modalBackdropDiv.classList.toggle("hidden");
+
+    const validateForm = () => {
+        const isValid = true;
+        requiredFormInputs.forEach((input) => {
+            const parent = input.parentElement;
+            if (input.value === "") {
+                const message = parent.querySelector(".message");
+                message.classList.remove("hidden");
+                isValid = false;
+            }
+        })
+        return isValid;
+    }
+
+    document.addEventListener("click", (e) => {
         const target = e.target;
         const parent = target.parentElement;
+
         if (target.classList.contains("add-book") || 
             target.classList.contains("close") || 
             parent.classList.contains("close")) {
                 toggleModal();
         } else if (target.classList.contains("save")) {
             if (validateForm()) {
-                const form = document.querySelector(".form");
-                const userBook = {};
+                const userBook = new Book();
                 userBook.title = form.querySelector("input[name=title]").value;
                 userBook.author = form.querySelector("input[name=author]").value;
                 userBook.coverImage = form.querySelector("input[name=coverImage]").value;
                 userBook.read = form.querySelector("input[name=status]").checked ? true : false;
-                addBookToLibrary(userBook);
+                myLibrary.addBook(userBook);
                 updateBookListUI();
                 toggleModal();
                 form.reset();
             }
         } else if (target.classList.contains("delete") || parent.classList.contains("delete")) {
             const targetBook = target.closest(".book");
-            if (targetBook && targetBook.dataset.uuid) {
-                removeBookFromLibrary(targetBook);
-                updateBookListUI();
-            }
-        } else if (target.classList.contains("card-banner") || target.parentElement.classList.contains("card-banner")) {
+            myLibrary.removeBook(targetBook.dataset.uuid);
+            updateBookListUI();
+        } else if (target.classList.contains("read-status") || target.parentElement.classList.contains("read-status")) {
             const targetBook = target.closest(".book");
-            myLibrary.map((book) => {
-                if (targetBook.dataset.uuid === book.uuid) book.setReadStatus();
+            books.map((book) => {
+                console.log(book);
+                if (targetBook.dataset.uuid === book.uuid) book.updateReadStatus();
             });
             updateBookListUI();
         }
-    });
+    })
 
-    const inputs = document.querySelectorAll(".input, .select");
-    inputs.forEach((input) => {
+    requiredFormInputs.forEach((input) => {
         input.addEventListener("input", (e) => {
             const parent = e.target.parentElement;
             const message = parent.querySelector(".message");
             message.classList.add("hidden");
         });
     });
-};
-
-init();
+})();
